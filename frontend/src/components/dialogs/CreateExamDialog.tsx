@@ -77,6 +77,8 @@ export default function CreateExamDialog({ open, onOpenChange }: Props) {
     endDate: "",
     endTime: "",
     instructions: "",
+    examType: "exam" as "exam" | "ca",
+    caNumber: "1",
   });
 
   useEffect(() => {
