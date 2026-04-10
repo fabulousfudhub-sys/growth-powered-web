@@ -1,0 +1,188 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 215 25% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 12%;
+
+    --primary: 215 50% 23%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 20% 94%;
+    --secondary-foreground: 215 25% 20%;
+
+    --muted: 210 15% 93%;
+    --muted-foreground: 215 12% 50%;
+
+    --accent: 174 62% 38%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 60% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 174 62% 38%;
+
+    --radius: 0.625rem;
+
+    --sidebar-background: 215 50% 16%;
+    --sidebar-foreground: 210 20% 88%;
+    --sidebar-primary: 174 62% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 45% 22%;
+    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-border: 215 40% 24%;
+    --sidebar-ring: 174 62% 45%;
+
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  .dark {
+    --background: 215 30% 8%;
+    --foreground: 210 20% 92%;
+    --card: 215 28% 12%;
+    --card-foreground: 210 20% 92%;
+    --popover: 215 28% 12%;
+    --popover-foreground: 210 20% 92%;
+    --primary: 174 62% 45%;
+    --primary-foreground: 215 50% 10%;
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 210 20% 88%;
+    --muted: 215 20% 16%;
+    --muted-foreground: 215 12% 55%;
+    --accent: 174 62% 38%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 55% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 88% 52%;
+    --warning-foreground: 0 0% 100%;
+    --border: 215 20% 22%;
+    --input: 215 20% 22%;
+    --ring: 174 62% 45%;
+    --sidebar-background: 215 35% 10%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 174 62% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 30% 16%;
+    --sidebar-accent-foreground: 210 20% 88%;
+    --sidebar-border: 215 25% 18%;
+    --sidebar-ring: 174 62% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .stat-card {
+    @apply bg-card rounded-xl border p-5 shadow-sm transition-all duration-200 hover:shadow-md;
+  }
+
+  .dashboard-section {
+    @apply space-y-4;
+  }
+
+  .exam-timer {
+    @apply font-mono text-lg font-bold tabular-nums;
+  }
+
+  .question-nav-btn {
+    @apply w-10 h-10 rounded-lg text-sm font-medium transition-all duration-150 flex items-center justify-center;
+  }
+
+  .question-nav-btn.answered {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  .question-nav-btn.current {
+    @apply ring-2 ring-accent ring-offset-2 ring-offset-background;
+  }
+
+  .question-nav-btn.current-active {
+    @apply bg-primary text-primary-foreground ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  .question-nav-btn.unanswered {
+    @apply bg-muted text-muted-foreground hover:bg-secondary;
+  }
+
+  .question-nav-btn.flagged {
+    @apply bg-warning text-warning-foreground;
+  }
+}
+
+/* Anti-cheat styles for exam mode */
+.exam-mode {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.exam-mode * {
+  -webkit-user-drag: none;
+}
+
+/* Screenshot prevention - blocks PrintScreen, screen capture tools */
+@media print {
+  body {
+    display: none !important;
+  }
+}
+
+.screenshot-blocked {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Animation for slide-in */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}

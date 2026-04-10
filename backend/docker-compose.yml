@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  cbt_app:
+    build: .
+    container_name: cbt_app
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: atapoly_cbt
+      DB_USER: cbt_admin
+      DB_PASSWORD: cbt_password
+      PORT: 3001
+    restart: always
+
+  db:
+    image: postgres:15
+    container_name: cbt_db
+    restart: always
+    environment:
+      POSTGRES_USER: cbt_admin
+      POSTGRES_PASSWORD: cbt_password
+      POSTGRES_DB: atapoly_cbt
+    ports:
+      - "5432:5432"   # optional (only if you want external DB access)
+    volumes:
+     - ./db:/docker-entrypoint-initdb.d
+     - db-data:/var/lib/postgresql/data      
+
+volumes:
+  db-data:

@@ -1,0 +1,10 @@
+project_id = "ihgcgmyjvnexaqcluoay"
+
+[functions.generate-questions]
+verify_jwt = false
+
+[functions.api-gateway]
+verify_jwt = false
+
+[functions.swift-handler]
+verify_jwt = false
