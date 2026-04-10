@@ -87,7 +87,7 @@ router.post('/', authenticate, requireRole('super_admin', 'admin', 'examiner'), 
   const {
     title, courseId, departmentId, programme, level, duration,
     totalQuestions, questionsToAnswer, totalMarks, startDate, endDate, instructions,
-    carryoverStudentIds
+    carryoverStudentIds, examType, caNumber
   } = req.body;
 
   if (!title || !courseId || !departmentId) {
@@ -105,15 +105,17 @@ router.post('/', authenticate, requireRole('super_admin', 'admin', 'examiner'), 
     const finalSchoolId = courses[0].school_id;
 
     const pinMode = req.body.pinMode || 'individual';
+    const finalExamType = examType || 'exam';
+    const finalCaNumber = caNumber || 1;
     const { rows } = await client.query(
       `INSERT INTO exams (title, course_id, department_id, school_id, programme, level,
        duration, total_questions, questions_to_answer, total_marks, start_date, end_date,
-       instructions, pin_mode, created_by)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING id`,
+       instructions, pin_mode, exam_type, ca_number, created_by)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING id`,
       [title, courseId, departmentId, finalSchoolId, programme || null, level || null,
        duration || 45, totalQuestions || 20, questionsToAnswer || 20,
        totalMarks || 40, startDate || null, endDate || null, instructions || null,
-       pinMode, req.user.id]
+       pinMode, finalExamType, finalCaNumber, req.user.id]
     );
     const examId = rows[0].id;
 
