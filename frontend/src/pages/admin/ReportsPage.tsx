@@ -209,8 +209,17 @@ export default function ReportsPage() {
           <CardTitle className="text-base">Generate Report</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
+              <Label>Course</Label>
+              <Select value={courseFilter} onValueChange={setCourseFilter}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Courses</SelectItem>
+                  {courses.map(c => <SelectItem key={c.id} value={c.code}>{c.code} - {c.title}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
               <Label>School</Label>
               <Select
                 value={school}
