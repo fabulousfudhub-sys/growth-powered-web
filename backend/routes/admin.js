@@ -187,14 +187,20 @@ router.get('/courses', authenticate, async (req, res) => {
   try {
     const { departmentId } = req.query;
     let query = `SELECT c.id, c.code, c.title, d.name as department, s.name as school,
-                        c.programme, c.level, u.name as instructor, c.instructor_id as "instructorId"
+                        c.programme, c.level, u.name as instructor, c.instructor_id as "instructorId",
+                        c.ca_weight as "caWeight", c.exam_weight as "examWeight", c.max_cas as "maxCas"
                  FROM courses c JOIN departments d ON c.department_id = d.id
                  JOIN schools s ON c.school_id = s.id LEFT JOIN users u ON c.instructor_id = u.id`;
     const params = [];
     if (departmentId) { params.push(departmentId); query += ` WHERE c.department_id = $1`; }
     query += ' ORDER BY c.code';
     const { rows } = await pool.query(query, params);
-    res.json(rows);
+    res.json(rows.map(r => ({
+      ...r,
+      caWeight: r.caWeight ? parseFloat(r.caWeight) : 30,
+      examWeight: r.examWeight ? parseFloat(r.examWeight) : 70,
+      maxCas: r.maxCas || 1,
+    })));
   } catch (err) { res.status(500).json({ error: 'Failed to fetch courses' }); }
 });
 
