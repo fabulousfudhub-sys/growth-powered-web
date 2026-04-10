@@ -56,20 +56,13 @@ export default function ReportsPage() {
   const [reportData, setReportData] = useState<ReportRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
-    api
-      .getSchools()
-      .then(setSchools)
-      .catch(() => {});
-    api
-      .getDepartments()
-      .then(setDepartments)
-      .catch(() => {});
-    api
-      .getDashboardStats()
-      .then(setStats)
-      .catch(() => {});
+    api.getSchools().then(setSchools).catch(() => {});
+    api.getDepartments().then(setDepartments).catch(() => {});
+    api.getDashboardStats().then(setStats).catch(() => {});
+    api.getCourses().then(setCourses).catch(() => {});
   }, []);
 
   const filteredDepts =
