@@ -38,11 +38,16 @@ interface ReportRow {
   totalMarks: number | undefined;
   status: string;
   submittedAt: string;
+  examType: string;
+  caNumber: number;
+  department: string;
+  level: string;
 }
 
 export default function ReportsPage() {
   const [school, setSchool] = useState("all");
   const [department, setDepartment] = useState("all");
+  const [courseFilter, setCourseFilter] = useState("all");
   const [reportType, setReportType] = useState("");
   const [exportFormat, setExportFormat] = useState("csv");
   const [schools, setSchools] = useState<School[]>([]);
@@ -89,8 +94,14 @@ export default function ReportsPage() {
         totalMarks: a.totalMarks,
         status: a.status,
         submittedAt: a.submittedAt || a.startedAt,
+        examType: a.examType || "exam",
+        caNumber: a.caNumber || 1,
+        department: a.department || "—",
+        level: a.level || "—",
       }));
-      setReportData(rows);
+      // Apply course filter
+      const filtered = courseFilter === "all" ? rows : rows.filter(r => r.courseCode === courseFilter);
+      setReportData(filtered);
       setGenerated(true);
       toast.success(
         `${reportType.replace("_", " ")} report generated with ${rows.length} records`,
