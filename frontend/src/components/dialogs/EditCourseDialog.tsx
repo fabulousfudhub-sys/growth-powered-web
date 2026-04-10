@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function EditCourseDialog({ open, onOpenChange, course }: Props) {
-  const [form, setForm] = useState({ code: '', title: '', departmentId: '', level: '', instructorId: '' });
+  const [form, setForm] = useState({ code: '', title: '', departmentId: '', level: '', instructorId: '', caWeight: '30', examWeight: '70', maxCas: '1' });
   const [departments, setDepartments] = useState<Department[]>([]);
   const [instructors, setInstructors] = useState<User[]>([]);
   const [saving, setSaving] = useState(false);
@@ -31,6 +31,9 @@ export default function EditCourseDialog({ open, onOpenChange, course }: Props) 
           code: course.code, title: course.title,
           departmentId: match?.id || '', level: course.level || '',
           instructorId: course.instructorId || '',
+          caWeight: String(course.caWeight ?? 30),
+          examWeight: String(course.examWeight ?? 70),
+          maxCas: String(course.maxCas ?? 1),
         });
       });
       api.getInstructors().then(setInstructors);
@@ -47,6 +50,9 @@ export default function EditCourseDialog({ open, onOpenChange, course }: Props) 
         code: form.code, title: form.title,
         departmentId: form.departmentId, schoolId: '',
         level: form.level, instructorId: form.instructorId || undefined,
+        caWeight: parseFloat(form.caWeight),
+        examWeight: parseFloat(form.examWeight),
+        maxCas: parseInt(form.maxCas),
       });
       toast.success('Course updated');
       onOpenChange(false);
