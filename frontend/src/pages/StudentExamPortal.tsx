@@ -23,7 +23,9 @@ import {
   CheckCircle,
   Send,
   GraduationCap,
+  Lock,
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import ExamTimer from "@/components/exam/ExamTimer";
 import QuestionRenderer from "@/components/exam/QuestionRenderer";
 import QuestionNavigation from "@/components/exam/QuestionNavigation";
