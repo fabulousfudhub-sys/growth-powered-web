@@ -84,7 +84,17 @@ export default function EditCourseDialog({ open, onOpenChange, course }: Props) 
               <SelectContent>{instructors.map(i => <SelectItem key={i.id} value={i.id}>{i.name}</SelectItem>)}</SelectContent>
             </Select>
           </div>
-        </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2"><Label>CA Weight (%)</Label><Input type="number" value={form.caWeight} onChange={e => { update('caWeight', e.target.value); update('examWeight', String(100 - parseFloat(e.target.value || '0'))); }} /></div>
+            <div className="space-y-2"><Label>Exam Weight (%)</Label><Input type="number" value={form.examWeight} onChange={e => { update('examWeight', e.target.value); update('caWeight', String(100 - parseFloat(e.target.value || '0'))); }} /></div>
+            <div className="space-y-2">
+              <Label>Max CAs</Label>
+              <Select value={form.maxCas} onValueChange={v => update('maxCas', v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{[1,2,3,4,5].map(n => <SelectItem key={n} value={String(n)}>{n}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+          </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSave} disabled={saving}>{saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}Save Changes</Button>
