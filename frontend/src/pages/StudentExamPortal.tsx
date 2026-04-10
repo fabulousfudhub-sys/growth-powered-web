@@ -328,6 +328,19 @@ export default function StudentExamPortal() {
   ).length;
   const isLastQuestion = currentQ === questions.length - 1;
 
+  // Submit restrictions: 80% answered + 50% time elapsed
+  const answeredPercent = questions.length > 0 ? (answeredCount / questions.length) * 100 : 0;
+  const timeElapsed = totalDuration - timeLeft;
+  const timeElapsedPercent = totalDuration > 0 ? (timeElapsed / totalDuration) * 100 : 0;
+  const canSubmit = answeredPercent >= 80 && timeElapsedPercent >= 50;
+  const submitDisabledReason = !canSubmit
+    ? answeredPercent < 80 && timeElapsedPercent < 50
+      ? `Answer at least 80% of questions (${answeredCount}/${Math.ceil(questions.length * 0.8)}) and wait until 50% of exam time has elapsed`
+      : answeredPercent < 80
+        ? `Answer at least 80% of questions (${answeredCount}/${Math.ceil(questions.length * 0.8)} answered)`
+        : `Wait until 50% of exam time has elapsed (${Math.round(timeElapsedPercent)}% elapsed)`
+    : "";
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
