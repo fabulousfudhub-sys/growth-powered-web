@@ -58,7 +58,7 @@ export default function AddCourseDialog({ open, onOpenChange }: Props) {
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2"><Label>CA Weight (%)</Label><Input type="number" value={form.caWeight} onChange={e => { update('caWeight', e.target.value); update('examWeight', String(100 - parseFloat(e.target.value || '0'))); }} /></div>
             <div className="space-y-2"><Label>Exam Weight (%)</Label><Input type="number" value={form.examWeight} onChange={e => { update('examWeight', e.target.value); update('caWeight', String(100 - parseFloat(e.target.value || '0'))); }} /></div>
-            <div className="space-y-2"><Label>Max CAs</Label><Select value={form.maxCas} onValueChange={v => update('maxCas', v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{[1,2,3,4,5].map(n => <SelectItem key={n} value={String(n)}>{n}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-2"><Label>Max CAs</Label><Select value={form.maxCas} onValueChange={v => update('maxCas', v)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="1">1 (First CA only)</SelectItem><SelectItem value="2">2 (First & Second CA)</SelectItem></SelectContent></Select></div>
           </div>
         </div>
         <DialogFooter>

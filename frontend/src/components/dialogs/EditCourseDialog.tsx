@@ -91,7 +91,7 @@ export default function EditCourseDialog({ open, onOpenChange, course }: Props) 
               <Label>Max CAs</Label>
               <Select value={form.maxCas} onValueChange={v => update('maxCas', v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{[1,2,3,4,5].map(n => <SelectItem key={n} value={String(n)}>{n}</SelectItem>)}</SelectContent>
+                <SelectContent><SelectItem value="1">1 (First CA only)</SelectItem><SelectItem value="2">2 (First & Second CA)</SelectItem></SelectContent>
               </Select>
             </div>
           </div>
