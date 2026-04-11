@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 interface Props { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function AddCourseDialog({ open, onOpenChange }: Props) {
-  const [form, setForm] = useState({ code: '', title: '', departmentId: '', level: '', instructor: '', caWeight: '30', examWeight: '70', maxCas: '1' });
+  const [form, setForm] = useState({ code: '', title: '', departmentId: '', level: '', instructor: '', caWeight: '30', examWeight: '70', maxCas: '2' });
   const [departments, setDepartments] = useState<Department[]>([]);
   const update = (key: string, val: string) => setForm(prev => ({ ...prev, [key]: val }));
 
@@ -34,7 +34,7 @@ export default function AddCourseDialog({ open, onOpenChange }: Props) {
       });
       toast.success(`Course "${form.code}" added!`);
       onOpenChange(false);
-      setForm({ code: '', title: '', departmentId: '', level: '', instructor: '', caWeight: '30', examWeight: '70', maxCas: '1' });
+      setForm({ code: '', title: '', departmentId: '', level: '', instructor: '', caWeight: '30', examWeight: '70', maxCas: '2' });
     } catch { toast.error('Failed to add course'); }
   };
 
