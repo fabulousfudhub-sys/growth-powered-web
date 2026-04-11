@@ -357,9 +357,10 @@ export default function CreateExamDialog({ open, onOpenChange }: Props) {
               <div className="space-y-2">
                 <Label>CA Number</Label>
                 <Select value={form.caNumber} onValueChange={(v) => update("caNumber", v)}>
-                  <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    {[1, 2, 3, 4, 5].map(n => <SelectItem key={n} value={String(n)}>CA {n}</SelectItem>)}
+                    <SelectItem value="1">First CA</SelectItem>
+                    <SelectItem value="2">Second CA</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
