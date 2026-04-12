@@ -344,7 +344,12 @@ export default function CreateExamDialog({ open, onOpenChange }: Props) {
               </div>
               <div className="space-y-2">
                 <Label>Type <span className="text-destructive">*</span></Label>
-                <Select value={form.examType} onValueChange={(v) => update("examType", v)}>
+                <Select value={form.examType} onValueChange={(v) => {
+                  update("examType", v);
+                  if (v === "ca" && parseFloat(form.totalMarks) > 30) {
+                    update("totalMarks", "30");
+                  }
+                }}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="exam">Exam</SelectItem>
@@ -469,9 +474,20 @@ export default function CreateExamDialog({ open, onOpenChange }: Props) {
                 <Input
                   type="number"
                   value={form.totalMarks}
-                  onChange={(e) => update("totalMarks", e.target.value)}
+                  max={form.examType === "ca" ? 30 : undefined}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (form.examType === "ca" && parseFloat(val) > 30) {
+                      update("totalMarks", "30");
+                    } else {
+                      update("totalMarks", val);
+                    }
+                  }}
                   required
                 />
+                {form.examType === "ca" && (
+                  <p className="text-xs text-muted-foreground">CA/Test marks cannot exceed 30</p>
+                )}
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
