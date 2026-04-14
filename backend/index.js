@@ -11,6 +11,7 @@ const syncRoutes = require('./routes/sync');
 const importRoutes = require('./routes/import');
 const settingsRoutes = require('./routes/settings');
 const uploadRoutes = require('./routes/uploads');
+const licenseRoutes = require('./routes/license');
 const { startSyncService } = require('./services/sync');
 const { autoSubmitAttempt } = require('./routes/auth');
 const { enforceSystemLock } = require('./middleware/systemLock');
@@ -52,6 +53,7 @@ app.use('/api/sync', syncRoutes);
 app.use('/api/import', importRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/license', licenseRoutes);
 
 // Serve frontend build
 app.use(express.static(path.join(__dirname, 'public')));

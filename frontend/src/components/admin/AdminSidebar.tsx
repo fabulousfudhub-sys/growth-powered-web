@@ -18,6 +18,7 @@ import {
   Sparkles,
   Lock,
   Power,
+  Key,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
@@ -69,6 +70,7 @@ const menuMap: Record<string, MenuSection[]> = {
       { title: "Reports", url: "/admin/reports", icon: FileText },
       { title: "Audit Log", url: "/admin/audit-log", icon: ScrollText },
       { title: "Settings", url: "/admin/settings", icon: Settings },
+      { title: "License", url: "/admin/license", icon: Key },
     ]},
   ],
   admin: [
