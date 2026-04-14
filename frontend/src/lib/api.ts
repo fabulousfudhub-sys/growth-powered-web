@@ -795,6 +795,20 @@ export const api = {
     });
   },
 
+  // License
+  async getLicenseStatus(): Promise<{ active: boolean; licenseKey: string | null; expiresAt: string | null }> {
+    return request("/api/license/status");
+  },
+  async activateLicense(licenseKey: string): Promise<void> {
+    await request("/api/license/activate", {
+      method: "POST",
+      body: JSON.stringify({ licenseKey }),
+    });
+  },
+  async deactivateLicense(): Promise<void> {
+    await request("/api/license/deactivate", { method: "POST" });
+  },
+
   // Site Settings
   async getSiteSettings(): Promise<Record<string, any>> {
     try {

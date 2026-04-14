@@ -18,6 +18,7 @@ import {
   Sparkles,
   Lock,
   Power,
+  Key,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";

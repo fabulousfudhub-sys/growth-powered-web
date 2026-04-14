@@ -25,6 +25,7 @@ import GradeEssayPage from "@/pages/admin/GradeEssayPage";
 import ExamMonitoringPage from "@/pages/admin/ExamMonitoringPage";
 import NetworkMonitoringPage from "@/pages/admin/NetworkMonitoringPage";
 import SyncPage from "@/pages/admin/SyncPage";
+import LicensePage from "@/pages/admin/LicensePage";
 import StudentExamPortal from "@/pages/StudentExamPortal";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
@@ -142,6 +143,7 @@ function AppRoutes() {
           <Route path="/admin/grade-essays" element={<GradeEssayPage />} />
           <Route path="/admin/network" element={<NetworkMonitoringPage />} />
           <Route path="/admin/sync" element={<SyncPage />} />
+          <Route path="/admin/license" element={<LicensePage />} />
           <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />
