@@ -824,6 +824,23 @@ export const api = {
     });
   },
 
+  // Database & Sync Config
+  async getDbConfig(): Promise<any> {
+    return request("/api/settings/db-config");
+  },
+  async saveSyncConfig(config: any): Promise<void> {
+    await request("/api/settings/sync-config", {
+      method: "PUT",
+      body: JSON.stringify(config),
+    });
+  },
+  async testSyncConnection(config: any): Promise<any> {
+    return request("/api/settings/test-sync-connection", {
+      method: "POST",
+      body: JSON.stringify(config),
+    });
+  },
+
   async uploadFile(file: File): Promise<{ url: string }> {
     const token = getAuthToken();
     const bases = getApiBases();
