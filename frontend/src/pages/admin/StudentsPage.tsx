@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { Upload, Search, UserPlus, Eye, Pencil, Trash2, ChevronRight, Building2, GraduationCap } from "lucide-react";
+import { Upload, Search, UserPlus, Eye, Pencil, Trash2, ChevronRight, Building2, GraduationCap, Users } from "lucide-react";
 import AddStudentDialog from "@/components/dialogs/AddStudentDialog";
 import EditUserDialog from "@/components/dialogs/EditUserDialog";
 import ImportCSVDialog from "@/components/dialogs/ImportCSVDialog";
@@ -37,8 +37,7 @@ export default function StudentsPage() {
   const [deleteStudent, setDeleteStudent] = useState<User | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
-  const [expandedDepts, setExpandedDepts] = useState<Set<string>>(new Set());
-  const [expandedLevels, setExpandedLevels] = useState<Set<string>>(new Set());
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   const load = () => {
     api.getStudents().then((all) => {
@@ -60,6 +59,7 @@ export default function StudentsPage() {
     return matchSearch && matchDept && matchLevel;
   });
 
+  // Group: Department → Level → Students
   const grouped = useMemo(() => {
     const map = new Map<string, Map<string, User[]>>();
     for (const s of filtered) {
@@ -73,8 +73,7 @@ export default function StudentsPage() {
     return map;
   }, [filtered]);
 
-  const toggleDept = (d: string) => setExpandedDepts(prev => { const n = new Set(prev); n.has(d) ? n.delete(d) : n.add(d); return n; });
-  const toggleLevel = (k: string) => setExpandedLevels(prev => { const n = new Set(prev); n.has(k) ? n.delete(k) : n.add(k); return n; });
+  const toggle = (k: string) => setExpanded(prev => { const n = new Set(prev); n.has(k) ? n.delete(k) : n.add(k); return n; });
   const toggleSelect = (id: string) => setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const handleDelete = async () => {
@@ -124,6 +123,26 @@ export default function StudentsPage() {
         </div>
       </div>
 
+      {/* Summary cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="stat-card">
+          <Users className="w-5 h-5 text-primary mb-2" />
+          <p className="text-2xl font-bold text-foreground">{filtered.length}</p>
+          <p className="text-xs text-muted-foreground mt-1">Total Students</p>
+        </div>
+        <div className="stat-card">
+          <Building2 className="w-5 h-5 text-accent mb-2" />
+          <p className="text-2xl font-bold text-foreground">{grouped.size}</p>
+          <p className="text-xs text-muted-foreground mt-1">Departments</p>
+        </div>
+        <div className="stat-card">
+          <GraduationCap className="w-5 h-5 text-primary mb-2" />
+          <p className="text-2xl font-bold text-foreground">{levels.length}</p>
+          <p className="text-xs text-muted-foreground mt-1">Levels</p>
+        </div>
+      </div>
+
+      {/* Filters */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="relative max-w-xs flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -145,65 +164,56 @@ export default function StudentsPage() {
         </Select>
       </div>
 
-      <p className="text-sm text-muted-foreground">{filtered.length} student(s) total</p>
-
-      {/* Nested data table: Dept → Level → Students */}
+      {/* Nested Table */}
       <div className="border border-border rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50 hover:bg-muted/50">
-              <TableHead className="w-8"></TableHead>
+              <TableHead className="w-10"></TableHead>
               <TableHead className="w-10"></TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Reg. Number</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead>Last Login</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {grouped.size === 0 && (
-              <TableRow><TableCell colSpan={6} className="text-center py-12 text-muted-foreground">No students found</TableCell></TableRow>
+              <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">No students found</TableCell></TableRow>
             )}
             {Array.from(grouped.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([dept, levelMap]) => {
-              const isDeptExpanded = expandedDepts.has(dept);
+              const deptKey = `d-${dept}`;
+              const isDeptOpen = expanded.has(deptKey);
               const deptCount = Array.from(levelMap.values()).reduce((s, arr) => s + arr.length, 0);
 
               return (
                 <>
-                  {/* Department header */}
-                  <TableRow
-                    key={`dept-${dept}`}
-                    className="bg-muted/30 hover:bg-muted/40 cursor-pointer border-t-2 border-border"
-                    onClick={() => toggleDept(dept)}
-                  >
+                  {/* Department Header */}
+                  <TableRow key={deptKey} className="bg-primary/5 hover:bg-primary/10 cursor-pointer border-t-2 border-border" onClick={() => toggle(deptKey)}>
                     <TableCell className="px-3">
-                      <ChevronRight className={`w-4 h-4 text-muted-foreground transition-transform ${isDeptExpanded ? "rotate-90" : ""}`} />
+                      <ChevronRight className={`w-4 h-4 text-primary transition-transform ${isDeptOpen ? "rotate-90" : ""}`} />
                     </TableCell>
-                    <TableCell colSpan={5}>
+                    <TableCell colSpan={6}>
                       <div className="flex items-center gap-2">
                         <Building2 className="w-4 h-4 text-primary" />
                         <span className="font-semibold text-foreground">{dept}</span>
-                        <Badge variant="secondary" className="text-xs">{deptCount}</Badge>
+                        <Badge variant="secondary" className="text-xs">{deptCount} student{deptCount !== 1 ? "s" : ""}</Badge>
                       </div>
                     </TableCell>
                   </TableRow>
-                  {isDeptExpanded && Array.from(levelMap.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([level, studs]) => {
-                    const levelKey = `${dept}|${level}`;
-                    const isLevelExpanded = expandedLevels.has(levelKey);
-
+                  {isDeptOpen && Array.from(levelMap.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([level, studs]) => {
+                    const lvlKey = `l-${dept}-${level}`;
+                    const isLvlOpen = expanded.has(lvlKey);
                     return (
                       <>
-                        {/* Level sub-header */}
-                        <TableRow
-                          key={`lvl-${levelKey}`}
-                          className="bg-muted/15 hover:bg-muted/25 cursor-pointer"
-                          onClick={() => toggleLevel(levelKey)}
-                        >
+                        {/* Level Sub-header */}
+                        <TableRow key={lvlKey} className="bg-muted/15 hover:bg-muted/25 cursor-pointer" onClick={() => toggle(lvlKey)}>
                           <TableCell></TableCell>
                           <TableCell className="px-3">
-                            <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isLevelExpanded ? "rotate-90" : ""}`} />
+                            <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isLvlOpen ? "rotate-90" : ""}`} />
                           </TableCell>
-                          <TableCell colSpan={4}>
+                          <TableCell colSpan={5}>
                             <div className="flex items-center gap-2">
                               <GraduationCap className="w-3.5 h-3.5 text-accent" />
                               <span className="text-sm font-medium text-foreground">{level}</span>
@@ -211,8 +221,8 @@ export default function StudentsPage() {
                             </div>
                           </TableCell>
                         </TableRow>
-                        {/* Student rows */}
-                        {isLevelExpanded && studs.map(s => (
+                        {/* Student Rows */}
+                        {isLvlOpen && studs.map(s => (
                           <TableRow key={s.id} className="hover:bg-muted/10">
                             <TableCell></TableCell>
                             <TableCell>
@@ -220,6 +230,7 @@ export default function StudentsPage() {
                             </TableCell>
                             <TableCell className="font-medium">{s.name}</TableCell>
                             <TableCell className="font-mono text-sm">{s.regNumber}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground truncate max-w-[180px]">{s.email || "—"}</TableCell>
                             <TableCell className="text-muted-foreground text-sm">
                               {s.lastLogin ? new Date(s.lastLogin).toLocaleString("en-NG", { timeZone: "Africa/Lagos" }) : "—"}
                             </TableCell>
